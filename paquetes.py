@@ -31,13 +31,16 @@ for i in range(T0):
     indices    = list(paquetes.keys()) # generar un arreglo con el tamaño K
     random.shuffle(indices)  # hacer un random con las posiciones
     poblacion.append(indices) # generar la población
+
 PARAR = False
 parar = 0 
-while PARAR != True :
+
+for i in range(9,0,-1):
+    print(i)
+'''while PARAR != True :
 #cruza
     for i in range(T0):
         for j in range(i+1,T0):
-              
             poblacion.append(poblacion[i][0:int(K/2)]+poblacion[j][int(K/2):K])
             poblacion.append(poblacion[j][0:int(K/2)]+poblacion[i][int(K/2):K])
     i = T0
@@ -138,6 +141,8 @@ plt.plot(promedios, marker='*', linestyle='-', color='g', label = "Promedios")
 plt.plot(maximos, marker='o', linestyle='--', color='r', label = "Maximos")
 plt.legend(loc="upper left")
 plt.show()
+
+'''
 
 
 
