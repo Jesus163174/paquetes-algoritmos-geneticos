@@ -10,7 +10,7 @@ class Geneticos:
         self.n_max     = n_max
         self.t_inicial = t_inicial
         self.cruzar     = cruzar
-        self.paquetes  = dict()
+        self.paquetes  = {}
         self.minimos   = []
         self.maximos   = []
         self.promedios = []
@@ -24,15 +24,27 @@ class Geneticos:
         self.generar_poblacion_incial()
         while self.terminar !=  True:
             self.cruza()
+           
             self.quitarRepetidos()
+           
             self.mutacion()
+           
             self.calcular_totales()
+            
             self.ordenar_poblacion()
             self.maximos_minimos()
+            
             self.promedio()
             self.poda()
+
+            print("despues de la poda: ",len(self.poblacion_inicial))
+           
             self.terminar = self.condicionParo()
             
+            self.quitarTotalGanancia()
+
+            self.t_inicial = len(self.poblacion_inicial)
+
             
         print("--------------------------------")
         for i in range(len(self.poblacion_inicial)):
@@ -54,6 +66,11 @@ class Geneticos:
         plt.xlabel("Iteraciones")
         plt.show()
 
+    def quitarTotalGanancia(self):
+        for i in range(len(self.poblacion_inicial)):
+            self.poblacion_inicial[i].pop()
+            self.poblacion_inicial[i].pop()
+
     def generar_paquetes(self):
         for i in range(self.k):
             self.paquetes[i] = random.randint(1,self.n_max)
@@ -65,10 +82,10 @@ class Geneticos:
             self.poblacion_inicial.append(indices)
 
     def condicionParo(self):
-        mayorElemento = self.poblacion_inicial[0][self.k+1]
+        mayorElemento = self.poblacion_inicial[0][(self.k)+1]
         count = 0
         for i in range(len(self.poblacion_inicial)):
-            if mayorElemento == self.poblacion_inicial[i][self.k+1]:
+            if self.poblacion_inicial[i][(self.k)+1] == mayorElemento:
                 count=count+1
         if count >= self.porcentaje:
             return True
@@ -76,13 +93,16 @@ class Geneticos:
     
     def cruza(self):
         for i in range(self.t_inicial):
-            for j in range(i+1, self.t_inicial):    
-                self.poblacion_inicial.append(self.poblacion_inicial[i][:self.k//2]+self.poblacion_inicial[j][self.k//2:self.k])
-                self.poblacion_inicial.append(self.poblacion_inicial[j][:self.k//2]+self.poblacion_inicial[i][self.k//2:self.k])
+            for j in range(i+1, self.t_inicial):
+                x = self.poblacion_inicial[i][:self.k//2]+self.poblacion_inicial[j][self.k//2:]
+                y = self.poblacion_inicial[j][:self.k//2]+self.poblacion_inicial[i][self.k//2:]
+                self.poblacion_inicial.append(x)
+                self.poblacion_inicial.append(y)
     
     def mutacion(self):
-        self.numero_intercambios = random.randint(0,int(self.k/2))
+        #self.numero_intercambios = random.randint(0,int(self.k/2))
         for i in range (len(self.poblacion_inicial)):
+            self.numero_intercambios = random.randint(0,int(self.k/2))
             for j in range(self.numero_intercambios):
                 self.posiciones_random = sample(range(0,self.k-1),2)
                 self.valorAux = self.poblacion_inicial[i][self.posiciones_random[0]]
@@ -103,45 +123,49 @@ class Geneticos:
             self.poblacion_inicial[i].append(self.total_peso+self.ganancias)
     
     def maximos_minimos(self):
-        minimo = min(self.poblacion_inicial, key=lambda poblacion: poblacion[self.k+1])
-        maximo = max(self.poblacion_inicial, key=lambda poblacion: poblacion[self.k+1])
+        #minimo = min(self.poblacion_inicial, key=lambda poblacion: poblacion[self.k+1])
+        minimo = self.poblacion_inicial[-1][(self.k)+1]
+        #maximo = max(self.poblacion_inicial, key=lambda poblacion: poblacion[self.k+1])
+        maximo  = self.poblacion_inicial[0][(self.k)+1]
 
-        self.minimos.append(minimo[self.k+1])
-        self.maximos.append(maximo[self.k+1])
+        self.minimos.append(minimo)
+        self.maximos.append(maximo)
     
     def promedio(self):
         self.suma_promedio = 0
         for i in range(len(self.poblacion_inicial)):
-            self.suma_promedio += self.poblacion_inicial[i][self.k+1]
+            self.suma_promedio += self.poblacion_inicial[i][(self.k)+1]
         self.prom = self.suma_promedio / len(self.poblacion_inicial)
         self.promedios.append(self.prom)
     
     def ordenar_poblacion(self):
-        self.poblacion_inicial.sort(key=lambda poblacion_inicial:poblacion_inicial[self.k+1], reverse = True)
+        self.poblacion_inicial.sort(key=lambda poblacion_inicial:poblacion_inicial[(self.k)+1], reverse = True)
     
     def poda(self):
         if len(self.poblacion_inicial) > self.t_max:
-            for i in range(len(self.poblacion_inicial)-1,self.t_max-1,-1):
-                self.poblacion_inicial.pop()
+            '''for i in range(len(self.poblacion_inicial)-1,self.t_max-1,-1):
+                self.poblacion_inicial.pop()'''
+            self.poblacion_inicial = self.poblacion_inicial[:self.t_max]
     
     def quitarRepetidos(self):
         i = self.t_inicial
         while i < len(self.poblacion_inicial):
             for j in range(self.k):
-                if self.hayRepetido(i,j) == True:
+                if self.hayRepetido(i,j):
                     jAux = self.hayRepetidoSiguiente(i+1)
                     if jAux != False:
                         self.valorAux = self.poblacion_inicial[i][j]
                         self.poblacion_inicial[i][j] = self.poblacion_inicial[i+1][jAux]
                         self.poblacion_inicial[i+1][jAux] = self.valorAux
-            i+=1
+            
             if  i+1 == len(self.poblacion_inicial):
                 break
+            i=i+1
 
     def hayRepetidoSiguiente(self,i):
         if i < len(self.poblacion_inicial): 
             for j in range(self.k):
-                if self.hayRepetido(i,j) == True:
+                if self.hayRepetido(i,j):
                     return j
         return False
     

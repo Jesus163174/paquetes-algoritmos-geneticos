@@ -1,10 +1,10 @@
 from geneticos import Geneticos
-k          = 19
-n_max      = 15
-m          = 50
-t_max      = 50
-t_inicial  = 5
-porcentaje = 100
+k          = 20
+n_max      = 4
+m          = 15
+t_max      = 40
+t_inicial  = 2
+porcentaje = 90
 cruza      = 1
 
 geneticos = Geneticos(k,n_max,m,t_max,t_inicial,porcentaje,cruza)
