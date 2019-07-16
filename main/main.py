@@ -1,8 +1,9 @@
 from geneticos import Geneticos
-from Interfaz import *
-# from Interfaz.window_ui import IForm
+from view.window_ui import *
+from view.window_ui import IForm
 
-class Main(QtWidgets.QMainWindow,Interface):
+class Main(QtWidgets.QMainWindow,IForm):
+
     def __init__(self,*args,**kwargs):
         QtWidgets.QMainWindow.__init__(self,*args,**kwargs)
         self.setupUi(self)
@@ -10,29 +11,26 @@ class Main(QtWidgets.QMainWindow,Interface):
 
 
     def initial(self):
-        k = int(self.k.text())
-        n_max = int(self.nMax.text())
-        m = int(self.m.text())
-        t_max = int(self.tMax.text())
-        t_inicial = int(self.t0.text())
-        porcentaje = int(self.codP.text())
+        k = int(self.textK.text())
+        # print(self.textK.text(),"K")
+        n_max = int(self.textNMax.text())
+        # print(self.textNMax.text(),"nmax")
+        m = int(self.textM.text())
+        # print(self.textM.text(),"m")
+        t_max = int(self.textTMax.text())
+        # print(self.textTMax.text(),"tmax")
+        t_inicial = int(self.text0.text())
+        # print(self.text0.text(),"t0")
+        porcentaje = int(self.textcodP.text())
+        # print(self.textcodP.text(),"cond")
         cruza = 1
         geneticos = Geneticos(k,n_max,m,t_max,t_inicial,porcentaje,cruza)
         geneticos.start()
-        
-
-
-
-
-
-# # k          = 15
-# # n_max      = 5
-# m          = 10
-# t_max      = 20
-# t_inicial  = 2
-# porcentaje = 50
-# cruza      = 1
-
+if __name__ == "__main__":
+    app = QtWidgets.QApplication([])
+    window = Main()
+    window.show()
+    app.exec_() 
 
 
 

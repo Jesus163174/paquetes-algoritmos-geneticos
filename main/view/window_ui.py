@@ -35,14 +35,14 @@ class IForm(object):
         self.buttonSelect.setObjectName("buttonSelect")
     
     
-        self.textNImagenes = QtWidgets.QLineEdit(Form)
-        self.textNImagenes.setObjectName("textNImagenes")
-        self.textNImagenes.setGeometry(QtCore.QRect(100, 40, 50, 20))
+        self.textK = QtWidgets.QLineEdit(Form)#K
+        self.textK.setObjectName("textK")
+        self.textK.setGeometry(QtCore.QRect(100, 40, 50, 20))
 
 
-        self.textGama = QtWidgets.QLineEdit(Form)
-        self.textGama.setObjectName("textGama")
-        self.textGama.setGeometry(QtCore.QRect(100, 80, 50, 20))
+        self.textNMax = QtWidgets.QLineEdit(Form)#NMAX
+        self.textNMax.setObjectName("textNMax")
+        self.textNMax.setGeometry(QtCore.QRect(100, 80, 50, 20))
 
         self.textM = QtWidgets.QLineEdit(Form)
         self.textM.setObjectName("textM")
@@ -56,9 +56,9 @@ class IForm(object):
         self.text0.setObjectName("text0")
         self.text0.setGeometry(QtCore.QRect(100, 200, 50, 20))
 
-        self.codP = QtWidgets.QLineEdit(Form)
-        self.codP.setObjectName("codP")
-        self.codP.setGeometry(QtCore.QRect(100, 240, 50, 20))
+        self.textcodP = QtWidgets.QLineEdit(Form)
+        self.textcodP.setObjectName("textcodP")
+        self.textcodP.setGeometry(QtCore.QRect(100, 240, 50, 20))
 
 
         self.k = QtWidgets.QLabel(Form)
