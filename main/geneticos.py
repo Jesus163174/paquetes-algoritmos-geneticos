@@ -2,8 +2,9 @@ import random
 from  random import sample
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 class Geneticos:
-
+    nImg = 0
     def __init__(self,k,n_max,m,t_max,t_inicial,porcentaje,cruzar):
         self.porcentaje = int((t_max*porcentaje)/100)
         self.k         = k
@@ -18,10 +19,11 @@ class Geneticos:
         self.m = m
         self.terminar = False
         self.t_max = t_max
-    
     def start(self):
+        self.nImg = 1
         self.generar_paquetes()
         self.generar_poblacion_incial()
+        print(self.paquetes)
         while self.terminar !=  True:
             self.cruza()
            
@@ -36,7 +38,7 @@ class Geneticos:
             
             self.promedio()
             self.poda()
-
+            self.graficaTotalPaquetes()
             print("despues de la poda: ",len(self.poblacion_inicial))
            
             self.terminar = self.condicionParo()
@@ -66,6 +68,32 @@ class Geneticos:
         plt.xlabel("Iteraciones")
         plt.show()
 
+    def graficaTotalPaquetes(self):
+        listaGrafica=[]
+        for i in range(len(self.poblacion_inicial)):
+            lista = []
+            self.total_peso = 0
+            for j in range(self.k):
+                if (self.total_peso + self.paquetes[self.poblacion_inicial[i][j]]) <= self.m :
+                    self.total_peso += self.paquetes[self.poblacion_inicial[i][j]]
+                    lista.append(self.paquetes[self.poblacion_inicial[i][j]])
+                else:
+                    break
+            listaGrafica.append(lista)
+        # print("-------GRAFICA-------")
+        # print(listaGrafica)
+        # print("-------FIN__GRAFICA-------")  
+        df2 = pd.DataFrame(listaGrafica)
+        df2.plot.barh(stacked=True)
+        plt.title(u'Ocupancia de paquetes')
+        plt.ylabel("Cromosomas")
+        plt.xlabel('Espacio Contenedor')
+        # plt.show()
+        img = "img"+str(self.nImg)
+        plt.savefig("ImagenGrafica\\"+img, bbox_inches='tight')
+        plt.close()
+        self.nImg = self.nImg + 1
+
     def quitarTotalGanancia(self):
         for i in range(len(self.poblacion_inicial)):
             self.poblacion_inicial[i].pop()
@@ -74,6 +102,7 @@ class Geneticos:
     def generar_paquetes(self):
         for i in range(self.k):
             self.paquetes[i] = random.randint(1,self.n_max)
+            
 
     def generar_poblacion_incial(self):
         for i in range(self.t_inicial):
